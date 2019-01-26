@@ -14,12 +14,18 @@
           <v-flex xs12 md2>
             <div class="caption ml-2">Todo Status</div>
             <div>
-              <v-btn small flat icon color="success">
-                <v-icon>check</v-icon>
-              </v-btn>
-              <v-btn small flat icon color="warning">
-                <v-icon>close</v-icon>
-              </v-btn>
+              <v-tooltip bottom>
+                <v-btn slot="activator" small flat icon color="success">
+                  <v-icon>check</v-icon>
+                </v-btn>
+                <span>Todo Complete</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <v-btn slot="activator" small flat icon color="warning">
+                  <v-icon>close</v-icon>
+                </v-btn>
+                <span>Todo Ongoing</span>
+              </v-tooltip>
             </div>
           </v-flex>
         </v-layout>
@@ -39,12 +45,18 @@
           <v-flex xs12 md2>
             <div class="caption ml-2">Todo Status</div>
             <div>
-              <v-btn small flat icon color="success">
-                <v-icon>check</v-icon>
-              </v-btn>
-              <v-btn small flat icon color="warning">
-                <v-icon>close</v-icon>
-              </v-btn>
+              <v-tooltip bottom>
+                <v-btn slot="activator" small flat icon color="success">
+                  <v-icon>check</v-icon>
+                </v-btn>
+                <span>Todo Complete</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <v-btn slot="activator" small flat icon color="warning">
+                  <v-icon>close</v-icon>
+                </v-btn>
+                <span>Todo Ongoing</span>
+              </v-tooltip>
             </div>
           </v-flex>
         </v-layout>

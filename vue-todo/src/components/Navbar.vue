@@ -1,12 +1,12 @@
 <template>
   <nav>
-    <v-navigation-drawer v-model="drawer" app class="indigo lighten-3">
+    <v-navigation-drawer v-model="drawer" app class="indigo lighten-4">
       <v-layout column align-center>
         <v-flex class="mt-5">
           <v-avatar size="100">
-            <v-icon size="100" class="white--text">person</v-icon>
+            <img src="/logo.png">
           </v-avatar>
-          <p class="white--text subheading mt-1">Me</p>
+          <p class="text-xs-center white--text subheading mt-1">Me</p>
         </v-flex>
       </v-layout>
       <v-list>

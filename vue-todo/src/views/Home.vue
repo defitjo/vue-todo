@@ -1,13 +1,26 @@
 <template>
-  <Navbar />
+  <div class="home">
+    <v-container class="my-5">
+      <v-card flat>
+        <v-layout pa-4 row wrap>
+          <v-flex xs12 md5>
+            <div class="caption">Todo Title</div>
+            <div>Testing Todo</div>
+          </v-flex>
+          <v-flex xs12 md5>
+            <div class="caption">Due Date</div>
+            <div>February 1, 2018</div>
+          </v-flex>
+        </v-layout>
+        <v-divider></v-divider>
+      </v-card>
+    </v-container>
+  </div>
 </template>
 
 <script>
-  import Navbar from '../components/Navbar'
 
   export default {
-    components: {
-      Navbar
-    }
+
   }
 </script>

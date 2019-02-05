@@ -79,7 +79,7 @@
                 <v-btn slot="activator" small flat icon color="warning">
                   <v-icon>not_interested</v-icon>
                 </v-btn>
-                <span>Todo Ongoing</span>
+                <span>Todo Incomplete</span>
               </v-tooltip>
             </div>
           </v-flex>
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-
+import db from '@/fb'
   export default {
     data () {
       return { 
@@ -119,6 +119,22 @@
         ],
         loading: false,
         dialog: false,
+      }
+    },
+    methods: {
+      submit() {
+        if (this.$refs.form.validate()) {
+          this.loading = true;
+          const todo = {
+            title: this.title,
+            info: this.info,
+            date: this.date
+          }
+          db.collection('todos').add(todo).then(() => {
+            this.loading = false;
+            this.dialog = false;
+          })
+        }
       }
     }
   }

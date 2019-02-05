@@ -44,10 +44,12 @@
           <v-form class="px-4" ref="form">
             <v-text-field v-model="title" label="Todo Title" :rules="titleRules" prepend-icon="title"></v-text-field>
             <v-textarea v-model="info" label="Todo Info" :rules="infoRules" prepend-icon="edit"></v-textarea>
+
             <v-menu v-model="menu" :close-on-content-click="false">
-              <v-text-field slot="activator" :rules="dateRules" clearable label="Due Date" prepend-icon="date_range" :value="formatDate"></v-text-field>
+              <v-text-field slot="activator" v-model="date" :rules="dateRules" clearable label="Due Date" prepend-icon="event" readonly></v-text-field>
               <v-date-picker v-model="date" @change="menu = false"></v-date-picker>
             </v-menu>
+
           </v-form>
           <v-spacer></v-spacer>
           <v-btn class="success" flat @click="submit" :loading="loading">Add Todo</v-btn>
@@ -98,10 +100,10 @@
 
   export default {
     data () {
-      return {
+      return { 
         title: '',
         info: '',
-        date: null,
+        date: new Date().toISOString().substr(0, 10),
         menu: false,
         titleRules: [
           v => !!v || 'Title is required',

@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import db from '@/fb'
+  import { db } from '../main'
   export default {
     data () {
       return { 
@@ -88,6 +88,11 @@ import db from '@/fb'
         snackbar: false,
       }
     },
+    firestore() {
+      return {
+        todos: db.collection('todos').orderBy('date')
+      }
+    },
     methods: {
       submit() {
         if (this.$refs.form.validate()) {
@@ -108,18 +113,5 @@ import db from '@/fb'
         db.collection('todos').doc(id).delete(); 
       }
     },
-    created() {
-      db.collection('todos').orderBy('date').onSnapshot(res => {
-        const changes = res.docChanges();
-        changes.forEach(change => {
-          if (change.type === 'added') {
-            this.todos.push({
-              ...change.doc.data(),
-              id: change.doc.id
-            })
-          }
-        })
-      })
-    }
   }
 </script>

@@ -1,18 +1,24 @@
 <template>
   <div class="home">
+
+    <v-snackbar v-model="snackbar" :timeout="4000" top color="success">
+      <span>New Todo Added! ^_^</span>
+      <v-btn color="white" flat @click="snackbar = false">Close</v-btn>
+    </v-snackbar>
+
     <v-container class="my-5 grey lighten-4">
       <v-layout>
         <h2>New Todos</h2>
       </v-layout>
-      <v-card flat>
+      <v-card flat v-for="todo in todos" :key="todo.title">
         <v-layout pa-4 row wrap>
           <v-flex xs12 md6>
             <div class="caption">Todo Title</div>
-            <div>Testing Todo</div>
+            <div>{{ todo.title }}</div>
           </v-flex>
           <v-flex xs12 md4>
             <div class="caption">Due Date</div>
-            <div>February 1, 2018</div>
+            <div>{{ todo.date }}</div>
           </v-flex>
           <v-flex xs12 md2>
             <div class="caption">Todo Status</div>
@@ -27,8 +33,8 @@
           </v-flex>
           <v-expansion-panel>
               <v-expansion-panel-content class="grey lighten-4">
-                <div slot="header">Testing Todo</div>
-                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet soluta doloribus iusto labore. Molestias dicta commodi, in, reiciendis ex nisi veritatis sed tempore quisquam reprehenderit delectus quis adipisci a nihil.</div>
+                <div slot="header">{{ todo.title }}</div>
+                <div>{{ todo.info }}</div>
               </v-expansion-panel-content>
             </v-expansion-panel>
         </v-layout>
@@ -44,12 +50,10 @@
           <v-form class="px-4" ref="form">
             <v-text-field v-model="title" label="Todo Title" :rules="titleRules" prepend-icon="title"></v-text-field>
             <v-textarea v-model="info" label="Todo Info" :rules="infoRules" prepend-icon="edit"></v-textarea>
-
             <v-menu v-model="menu" :close-on-content-click="false">
               <v-text-field slot="activator" v-model="date" :rules="dateRules" clearable label="Due Date" prepend-icon="event" readonly></v-text-field>
               <v-date-picker v-model="date" @change="menu = false"></v-date-picker>
             </v-menu>
-
           </v-form>
           <v-spacer></v-spacer>
           <v-btn class="success" flat @click="submit" :loading="loading">Add Todo</v-btn>
@@ -101,6 +105,7 @@ import db from '@/fb'
   export default {
     data () {
       return { 
+        todos: [],
         title: '',
         info: '',
         date: new Date().toISOString().substr(0, 10),
@@ -119,6 +124,7 @@ import db from '@/fb'
         ],
         loading: false,
         dialog: false,
+        snackbar: false,
       }
     },
     methods: {
@@ -133,9 +139,23 @@ import db from '@/fb'
           db.collection('todos').add(todo).then(() => {
             this.loading = false;
             this.dialog = false;
+            this.snackbar = true
           })
         }
       }
+    },
+    created() {
+      db.collection('todos').onSnapshot(res => {
+        const changes = res.docChanges();
+        changes.forEach(change => {
+          if (change.type === 'added') {
+            this.todos.push({
+              ...change.doc.data(),
+              id: change.doc.id
+            })
+          }
+        })
+      })
     }
   }
 </script>

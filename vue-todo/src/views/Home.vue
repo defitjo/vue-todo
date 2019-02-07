@@ -7,10 +7,7 @@
     </v-snackbar>
 
     <v-container class="my-5 grey lighten-4">
-      <v-layout>
-        <h2>New Todos</h2>
-      </v-layout>
-      <v-card flat v-for="todo in todos" :key="todo.title">
+      <v-card flat v-for="(todo, idx) in todos" :key="idx">
         <v-layout pa-4 row wrap>
           <v-flex xs12 md6>
             <div class="caption">Todo Title</div>
@@ -24,7 +21,7 @@
             <div class="caption">Todo Status</div>
             <div>
               <v-tooltip bottom>
-                <v-btn slot="activator" small flat icon color="success">
+                <v-btn slot="activator" @click="remove(todo.id)" small flat icon color="success">
                   <v-icon>check</v-icon>
                 </v-btn>
                 <span>Todo Complete</span>
@@ -60,42 +57,6 @@
           <v-btn color="white" class="blue darken-1" flat @click="dialog = false">Close</v-btn>
         </v-card>
       </v-dialog>
-    </v-container>
-
-    <v-container class="my-5 success lighten-5" >
-      <v-layout>
-        <h2>Completed Todos</h2>
-      </v-layout>
-      <v-card flat>
-        <v-layout pa-4 row wrap>
-          <v-flex xs12 md6>
-            <div class="caption">Todo Title</div>
-            <div>Testing Todo</div>
-          </v-flex>
-          <v-flex xs12 md4>
-            <div class="caption">Due Date</div>
-            <div>February 1, 2018</div>
-          </v-flex>
-          <v-flex xs12 md2>
-            <div class="caption">Todo Status</div>
-            <div>
-              <v-tooltip bottom>
-                <v-btn slot="activator" small flat icon color="warning">
-                  <v-icon>not_interested</v-icon>
-                </v-btn>
-                <span>Todo Incomplete</span>
-              </v-tooltip>
-            </div>
-          </v-flex>
-          <v-expansion-panel>
-              <v-expansion-panel-content class="grey lighten-4">
-                <div slot="header">Testing Todo</div>
-                <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet soluta doloribus iusto labore. Molestias dicta commodi, in, reiciendis ex nisi veritatis sed tempore quisquam reprehenderit delectus quis adipisci a nihil.</div>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-        </v-layout>
-        <v-divider></v-divider>
-      </v-card>
     </v-container>
   </div>
 </template>
@@ -142,10 +103,13 @@ import db from '@/fb'
             this.snackbar = true
           })
         }
+      },
+      remove(id) {
+        db.collection('todos').doc(id).delete(); 
       }
     },
     created() {
-      db.collection('todos').onSnapshot(res => {
+      db.collection('todos').orderBy('date').onSnapshot(res => {
         const changes = res.docChanges();
         changes.forEach(change => {
           if (change.type === 'added') {
